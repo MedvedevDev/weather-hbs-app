@@ -5,6 +5,7 @@ const forecast = require('./utils/location')
 const geocode = require('./utils/geocode')
 
 const myApplication = express()
+const port = process.env.PORT || 3000
 
 const pathToPublicFolder = path.join(__dirname, '../public/');
 const viewsPath = path.join(__dirname, '../templates/views')
@@ -90,6 +91,6 @@ myApplication.get('*', (req, res) => {
     })
 })
 
-myApplication.listen(3000, () => {
+myApplication.listen(port, () => {
     console.log('Server is started')
 })

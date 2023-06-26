@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express') //express returns single function
 const hbs = require('hbs')
-const forecast = require('./utils/location')
+const forecast = require('./utils/forecast')
 const geocode = require('./utils/geocode')
 
 const myApplication = express()
@@ -58,7 +58,7 @@ myApplication.get('/weather', (req,res) => {
                 error: error
             })
         }
-        forecast({latitude: response.data[0].latitude, longitude: response.data[0].longitude}, (error, {temperature, feelslike} = {}) => {
+        forecast({latitude: response.data[0].latitude, longitude: response.data[0].longitude}, (error, {temperature, feelslike, humidity} = {}) => {
             if (error) {
                 return res.send({
                     error: error
@@ -66,8 +66,8 @@ myApplication.get('/weather', (req,res) => {
             }
 
             res.send({
-                forecast: `Temp: ${temperature}, likeTemp: ${feelslike}`,
-                location: response.data[0].location,
+                forecast: `Overcast: Is is currently ${temperature}, it feels like ${feelslike}. The humidity is ${humidity}`,
+                //location: response.data[0].location,
                 address: req.query.address
             })
         })

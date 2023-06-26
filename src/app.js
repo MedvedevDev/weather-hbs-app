@@ -52,13 +52,15 @@ myApplication.get('/weather', (req,res) => {
         })
     }
 
-    geocode(req.query.address = 'boston', (error, response) => {
+    // ask why when we use default param it always will send the default in this case!
+    // always boston - geocode(req.query.address='boston', (error, response) => {............}
+    geocode(req.query.address, (error, response) => {
         if (error) {
             return res.send({
                 error: error
             })
         }
-        forecast({latitude: response.data[0].latitude, longitude: response.data[0].longitude}, (error, {temperature, feelslike, humidity} = {}) => {
+        forecast({latitude: response.latitude, longitude: response.longitude}, (error, forecastData) => {
             if (error) {
                 return res.send({
                     error: error
@@ -66,7 +68,7 @@ myApplication.get('/weather', (req,res) => {
             }
 
             res.send({
-                forecast: `Overcast: Is is currently ${temperature}, it feels like ${feelslike}. The humidity is ${humidity}`,
+                forecast: forecastData,
                 //location: response.data[0].location,
                 address: req.query.address
             })
